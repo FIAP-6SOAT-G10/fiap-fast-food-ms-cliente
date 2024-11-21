@@ -1,9 +1,7 @@
 #language: pt
-  Funcionalidade: Pagamento
+Funcionalidade: Gerenciamento de Clientes
 
-    Cenario: Buscar pagamento
-      Dado que recebo um identificador de pagamento valido
-      Quando realizar a busca
-      E o pagamento nao existir
-      Entao os detalhes do pagamento nao devem ser retornados
-      E o codigo 404 deve ser apresentado
+  Cenario: Registrar um novo cliente
+    Dado que eu tenho dados do cliente com nome "João Silva", email "joao.silva@example.com", e cpf "12345678901"
+    Quando eu registrar o cliente
+    Entao o cliente deve ser registrado com sucesso
