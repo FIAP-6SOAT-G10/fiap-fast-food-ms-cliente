@@ -1,9 +1,6 @@
 package br.com.fiap.techchallenge.infra.entrypoints.rest.customer;
 
-import br.com.fiap.techchallenge.application.usecases.cliente.UpdateParcialCustomerUseCase;
-import br.com.fiap.techchallenge.application.usecases.cliente.UpdateCustomerUseCase;
-import br.com.fiap.techchallenge.application.usecases.cliente.RegisterCustomerUseCase;
-import br.com.fiap.techchallenge.application.usecases.cliente.ListCustomerUseCase;
+import br.com.fiap.techchallenge.application.usecases.cliente.*;
 import br.com.fiap.techchallenge.domain.ErrorResponse;
 import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 import br.com.fiap.techchallenge.infra.entrypoints.rest.customer.model.CustomerDTO;
@@ -34,6 +31,7 @@ public class CustomerController {
 
     private final RegisterCustomerUseCase registerCustomerUseCase;
     private final ListCustomerUseCase listCustomerUseCase;
+    private final FindCustomerByCpfUseCase findCustomerByIdUseCase;
     private final UpdateParcialCustomerUseCase updateParcialCustomerUseCase;
     private final UpdateCustomerUseCase updateCustomerUseCase;
 
@@ -159,7 +157,7 @@ public class CustomerController {
     @CrossOrigin(origins = "*", maxAge = 3600)
     public ResponseEntity<CustomerDTO> getCustomerByCpf(@PathVariable("cpf") String cpf) {
         log.info("Buscando cliente por CPF: {}", cpf);
-        Optional<Customer> customer = listCustomerUseCase.findByCpf(cpf);
+        Optional<Customer> customer = findCustomerByIdUseCase.findByCpf(cpf);
         if (customer.isPresent()) {
             log.info("Cliente encontrado: {}", customer.get().getId());
             CustomerDTO customerDTO = new CustomerDTO(customer.get().getId(), customer.get().getCpf(), customer.get().getName(), customer.get().getEmail());
