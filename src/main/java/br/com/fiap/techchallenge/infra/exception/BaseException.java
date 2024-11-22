@@ -23,4 +23,8 @@ public abstract class BaseException extends RuntimeException {
         this.message = erro;
         this.httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
     }
+
+    protected String getErrorCode() {
+        return this.error.getCode();
+    }
 }

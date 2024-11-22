@@ -5,12 +5,14 @@ import br.com.fiap.techchallenge.domain.ErrorsEnum;
 import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 import br.com.fiap.techchallenge.infra.dataproviders.database.persistence.CustomerEntityRepository;
 import br.com.fiap.techchallenge.infra.dataproviders.database.persistence.entities.CustomerEntity;
+import br.com.fiap.techchallenge.infra.exception.CustomerAlreadyExistsException;
 import br.com.fiap.techchallenge.infra.exception.CustomerException;
 import br.com.fiap.techchallenge.infra.mapper.CustomerMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+@Slf4j
 public class CustomerRepository implements ICustomerRepository {
 
     private final CustomerEntityRepository customerEntityRepository;
@@ -33,9 +36,11 @@ public class CustomerRepository implements ICustomerRepository {
 
     @Override
     public Customer updateCustomerData(Long id, JsonPatch patch) {
+        log.info("Atualizando dados do cliente com ID: {}", id);
         try {
             Optional<CustomerEntity> optionalCustomerEntity = customerEntityRepository.findById(id);
             if (!optionalCustomerEntity.isPresent()) {
+                log.error("Cliente não encontrado para o ID: {}", id);
                 throw new CustomerException(ErrorsEnum.CLIENTE_CPF_NAO_EXISTENTE);
             }
 
@@ -44,22 +49,27 @@ public class CustomerRepository implements ICustomerRepository {
             JsonNode patched = patch.apply(customerNode);
 
             if (patched == null) {
+                log.error("Erro ao aplicar patch no cliente com ID: {}", id);
                 throw new CustomerException(ErrorsEnum.CLIENTE_FALHA_GENERICA, "Patched node is null");
             }
 
             CustomerEntity updatedCustomerEntity = objectMapper.treeToValue(patched, CustomerEntity.class);
             updatedCustomerEntity = customerEntityRepository.saveAndFlush(updatedCustomerEntity);
+            log.info("Dados do cliente atualizados com sucesso: {}", updatedCustomerEntity.getId());
 
             return customerMapper.fromEntityToDomain(updatedCustomerEntity);
         } catch (JsonPatchException e) {
+            log.error("Erro ao aplicar patch no cliente com ID: {}: {}", id, e.getMessage());
             throw new CustomerException(ErrorsEnum.CLIENTE_FALHA_DURANTE_ATUALIZACAO, String.valueOf(e));
         } catch (Exception e) {
+            log.error("Erro genérico ao atualizar cliente com ID: {}: {}", id, e.getMessage());
             throw new CustomerException(ErrorsEnum.CLIENTE_FALHA_GENERICA, String.valueOf(e));
         }
 }
 
     @Override
     public Customer updateCustomer(Long id, Customer customer) {
+        log.info("Atualizando cliente com ID: {}", id);
         CustomerEntity novoCustomerEntity = customerMapper.fromDomainToEntity(customer);
 
         Optional<CustomerEntity> clienteOptional = customerEntityRepository.findById(id);
@@ -67,19 +77,29 @@ public class CustomerRepository implements ICustomerRepository {
         if (clienteOptional.isPresent()) {
             CustomerEntity antigoCustomerEntity = clienteOptional.get();
             fillWithNewData(antigoCustomerEntity, novoCustomerEntity);
+            log.info("Cliente atualizado com sucesso: {}", antigoCustomerEntity.getId());
             return customerMapper.fromEntityToDomain(customerEntityRepository.saveAndFlush(antigoCustomerEntity));
         } else {
+            log.error("Cliente não encontrado para o ID: {}", id);
             throw new CustomerException(ErrorsEnum.CLIENTE_CODIGO_IDENTIFICADOR_INVALIDO);
         }
     }
 
     @Override
     public Customer saveCustomer(Customer customer) {
-        return customerMapper.fromEntityToDomain(customerEntityRepository.saveAndFlush(customerMapper.fromDomainToEntity(customer)));
+        log.info("Salvando novo cliente com CPF: {}", customer.getCpf());
+        if (customerEntityRepository.findByCpf(customer.getCpf()).isPresent()) {
+            log.error("Cliente já cadastrado com CPF: {}", customer.getCpf());
+            throw new CustomerAlreadyExistsException(ErrorsEnum.CLIENTE_JA_CADASTRADO);
+        }
+        Customer savedCustomer = customerMapper.fromEntityToDomain(customerEntityRepository.saveAndFlush(customerMapper.fromDomainToEntity(customer)));
+        log.info("Cliente salvo com sucesso: {}", savedCustomer.getId());
+        return savedCustomer;
     }
 
     @Override
     public List<Customer> listCustomers(String email, String cpf) {
+        log.info("Listando clientes com email: {} e CPF: {}", email, cpf);
         List<CustomerEntity> listaCustomerEntity = new ArrayList<>();
         Predicate<CustomerEntity> predicate = cliente -> {
             Boolean hasSameEmail = email == null || cliente.getEmail().equals(email);
@@ -96,13 +116,23 @@ public class CustomerRepository implements ICustomerRepository {
             listaCustomerEntity.addAll(customerEntityRepository.findAll());
         }
 
+        log.info("Clientes encontrados: {}", listaCustomerEntity.size());
         return customerMapper.fromListEntityToListDomain(listaCustomerEntity);
     }
 
     @Override
     public Optional<Customer> findByCpf(String cpf) {
-        return customerEntityRepository.findByCpf(cpf)
+        Optional<Customer> customer = customerEntityRepository.findByCpf(cpf)
                 .map(customerMapper::fromEntityToDomain);
+        if (customer.isPresent()) {
+            log.info("Cliente encontrado: {}", customer.get().getId());
+        } else {
+            log.info("Cliente não encontrado para o CPF: {}", cpf);
+        }
+        if (customer.isEmpty()) {
+            throw new CustomerException(ErrorsEnum.CLIENTE_CPF_NAO_EXISTENTE);
+        }
+        return customer;
     }
 
     private void fillWithNewData(CustomerEntity antigoCustomerEntity, CustomerEntity novoCustomerEntity) {
