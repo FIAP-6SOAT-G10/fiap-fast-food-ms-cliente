@@ -11,6 +11,21 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      db:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: testdb
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+        options: >-
+          --health-cmd="pg_isready -U testuser -d testdb"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -37,6 +52,18 @@ jobs:
 
     - name: Run integration tests
       run: mvn verify -Pintegration-test
+
+    - name: Start application
+      run: mvn spring-boot:run -Dspring-boot.run.profiles=integration-test &
+      env:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
+        SPRING_DATASOURCE_USERNAME: testuser
+        SPRING_DATASOURCE_PASSWORD: testpassword
+
+    - name: Wait for application to start
+      run: |
+        echo "Waiting for application to start..."
+        sleep 30
 
     - name: Run BDD tests
       run: mvn verify -Pbdd-test
