@@ -3,33 +3,34 @@ services:
     container_name: postgres_container
     image: postgres
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-tech}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tech_passwd}
+      POSTGRES_DB: customers
+      POSTGRES_USER: tech
+      POSTGRES_PASSWORD: tech_passwd
       PGDATA: /data/postgres
     ports:
       - "5432:5432"
     networks:
-      - fiaptechchallengenetwork
+      - customersnetwork
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U tech" ]
       interval: 5s
       timeout: 5s
       retries: 10
 
-  fiapfastfood:
-    container_name: fiap-fast-food
+  customers:
+    container_name: customers
     build:
       context: .
-    image: fiap_fast_food_app/fastfoodapp
+    image: customers_app/customers
     ports:
       - "8080:8080"
     networks:
-      - fiaptechchallengenetwork
+      - customersnetwork
     depends_on:
       postgres:
         condition: service_healthy
 
 networks:
-  fiaptechchallengenetwork:
-    name: fiaptechchallengenetwork
+  customersnetwork:
+    name: customersnetwork
     driver: bridge

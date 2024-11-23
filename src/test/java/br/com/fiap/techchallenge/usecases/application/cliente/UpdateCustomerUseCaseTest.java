@@ -1,8 +1,9 @@
 package br.com.fiap.techchallenge.usecases.application.cliente;
 
 import br.com.fiap.techchallenge.application.gateways.ICustomerRepository;
-import br.com.fiap.techchallenge.application.usecases.cliente.UpdateCustomerUseCase;
+import br.com.fiap.techchallenge.application.usecases.costumers.UpdateCustomerUseCase;
 import br.com.fiap.techchallenge.domain.entities.customer.Customer;
+import br.com.fiap.techchallenge.infra.exception.CustomerException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -41,7 +42,7 @@ class UpdateCustomerUseCaseTest {
 
     @Test
     void updateCustomerThrowsExceptionWhenCustomerIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> updateCustomerUseCase.updateCustomers("1", null));
+        assertThrows(CustomerException.class, () -> updateCustomerUseCase.updateCustomers("1", null));
     }
 
     @Test

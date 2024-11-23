@@ -1,7 +1,7 @@
 package br.com.fiap.techchallenge.usecases.application.cliente;
 
 import br.com.fiap.techchallenge.application.gateways.ICustomerRepository;
-import br.com.fiap.techchallenge.application.usecases.cliente.RegisterCustomerUseCase;
+import br.com.fiap.techchallenge.application.usecases.costumers.RegisterCustomerUseCase;
 import br.com.fiap.techchallenge.domain.ErrorsEnum;
 import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 import br.com.fiap.techchallenge.infra.exception.CustomerException;
@@ -38,29 +38,29 @@ class RegisterCustomerUseCaseTest {
 
     @Test
     void saveCustomerThrowsExceptionWhenNameIsNull() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomerException exception = assertThrows(CustomerException.class, () -> {
             new Customer("42321973899", null, "joao.saladinha@example.com");
         });
 
-        assertEquals("Nome é um campo obrigatório no cadastro de novos clientes.", exception.getMessage());
+        assertEquals(ErrorsEnum.CLIENTE_NOME_OBRIGATORIO_CADASTRO.getMessage(), exception.getMessage());
     }
 
     @Test
     void saveCustomerThrowsExceptionWhenEmailIsNull() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomerException exception = assertThrows(CustomerException.class, () -> {
             new Customer("42321973899", "Joao Saladinha", null);
         });
 
-        assertEquals("E-mail é um campo obrigatório no cadastro de novos clientes.", exception.getMessage());
+        assertEquals(ErrorsEnum.CLIENTE_EMAIL_OBRIGATORIO_CADASTRO.getMessage(), exception.getMessage());
     }
 
     @Test
     void saveCustomerThrowsExceptionWhenCpfIsNull() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomerException exception = assertThrows(CustomerException.class, () -> {
             new Customer(null, "Joao Saladinha", "joao.saladinha@example.com");
         });
 
-        assertEquals("Cpf é um campo obrigatório no cadastro de novos clientes.", exception.getMessage());
+        assertEquals(ErrorsEnum.CLIENTE_CPF_OBRIGATORIO_CADASTRO.getMessage(), exception.getMessage());
     }
 
     @Test

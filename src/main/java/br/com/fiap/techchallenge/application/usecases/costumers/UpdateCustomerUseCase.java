@@ -1,19 +1,21 @@
-package br.com.fiap.techchallenge.application.usecases.cliente;
+package br.com.fiap.techchallenge.application.usecases.costumers;
 
 import br.com.fiap.techchallenge.application.gateways.ICustomerRepository;
+import br.com.fiap.techchallenge.domain.ErrorsEnum;
 import br.com.fiap.techchallenge.domain.entities.customer.Customer;
+import br.com.fiap.techchallenge.infra.exception.CustomerException;
 
 public class UpdateCustomerUseCase {
 
     private final ICustomerRepository customerRepository;
 
-    public UpdateCustomerUseCase(ICustomerRepository clienteRepository) {
-        this.customerRepository = clienteRepository;
+    public UpdateCustomerUseCase(ICustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
     }
 
     public Customer updateCustomers(String id, Customer customer) {
         if (customer == null) {
-            throw new IllegalArgumentException("Customer cannot be null");
+            throw new CustomerException(ErrorsEnum.CLIENTE_CPF_NAO_EXISTE);
         }
 
         long customerId;

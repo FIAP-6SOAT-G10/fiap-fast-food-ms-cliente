@@ -1,4 +1,4 @@
-package br.com.fiap.techchallenge.application.usecases.cliente;
+package br.com.fiap.techchallenge.application.usecases.costumers;
 
 import br.com.fiap.techchallenge.application.gateways.ICustomerRepository;
 import br.com.fiap.techchallenge.domain.ErrorsEnum;

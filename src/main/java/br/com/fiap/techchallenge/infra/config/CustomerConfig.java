@@ -1,10 +1,10 @@
 package br.com.fiap.techchallenge.infra.config;
 
 import br.com.fiap.techchallenge.application.gateways.ICustomerRepository;
-import br.com.fiap.techchallenge.application.usecases.cliente.UpdateParcialCustomerUseCase;
-import br.com.fiap.techchallenge.application.usecases.cliente.UpdateCustomerUseCase;
-import br.com.fiap.techchallenge.application.usecases.cliente.RegisterCustomerUseCase;
-import br.com.fiap.techchallenge.application.usecases.cliente.ListCustomerUseCase;
+import br.com.fiap.techchallenge.application.usecases.costumers.UpdateParcialCustomerUseCase;
+import br.com.fiap.techchallenge.application.usecases.costumers.UpdateCustomerUseCase;
+import br.com.fiap.techchallenge.application.usecases.costumers.RegisterCustomerUseCase;
+import br.com.fiap.techchallenge.application.usecases.costumers.ListCustomerUseCase;
 import br.com.fiap.techchallenge.infra.gateways.CustomerRepository;
 import br.com.fiap.techchallenge.infra.mapper.CustomerMapper;
 import br.com.fiap.techchallenge.infra.dataproviders.database.persistence.CustomerEntityRepository;
@@ -16,23 +16,23 @@ import org.springframework.context.annotation.Configuration;
 public class CustomerConfig {
 
     @Bean
-    public ListCustomerUseCase listCustomersUseCase(ICustomerRepository clienteRepository) {
-        return new ListCustomerUseCase(clienteRepository);
+    public ListCustomerUseCase listCustomersUseCase(ICustomerRepository customerRepository) {
+        return new ListCustomerUseCase(customerRepository);
     }
 
     @Bean
-    public RegisterCustomerUseCase registerCustomerUseCase(ICustomerRepository clienteRepository) {
-        return new RegisterCustomerUseCase(clienteRepository);
+    public RegisterCustomerUseCase registerCustomerUseCase(ICustomerRepository customerRepository) {
+        return new RegisterCustomerUseCase(customerRepository);
     }
 
     @Bean
-    public UpdateParcialCustomerUseCase updateParcialCustomerUseCase(ICustomerRepository clienteRepository) {
-        return new UpdateParcialCustomerUseCase(clienteRepository);
+    public UpdateParcialCustomerUseCase updateParcialCustomerUseCase(ICustomerRepository customerRepository) {
+        return new UpdateParcialCustomerUseCase(customerRepository);
     }
 
     @Bean
-    public UpdateCustomerUseCase updateCustomerUseCase(ICustomerRepository clienteRepository) {
-        return new UpdateCustomerUseCase(clienteRepository);
+    public UpdateCustomerUseCase updateCustomerUseCase(ICustomerRepository customerRepository) {
+        return new UpdateCustomerUseCase(customerRepository);
     }
 
     @Bean

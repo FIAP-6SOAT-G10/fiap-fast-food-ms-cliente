@@ -29,11 +29,11 @@ public class CustomerMapper {
         return new Customer(customerDTO.getId(), customerDTO.getCpf(), customerDTO.getName(), customerDTO.getEmail());
     }
 
-    public List<Customer> fromListEntityToListDomain(List<CustomerEntity> clientes) {
-        return clientes.stream().map(this::fromEntityToDomain).toList();
+    public List<Customer> fromListEntityToListDomain(List<CustomerEntity> customerEntities) {
+        return customerEntities.stream().map(this::fromEntityToDomain).toList();
     }
 
-    public List<CustomerEntity> fromListDomainToListEntity(List<Customer> customers) {
-        return customers.stream().map(this::fromDomainToEntity).toList();
+    public List<CustomerEntity> fromListDomainToListEntity(List<Customer> customerList) {
+        return customerList.stream().map(this::fromDomainToEntity).toList();
     }
 }

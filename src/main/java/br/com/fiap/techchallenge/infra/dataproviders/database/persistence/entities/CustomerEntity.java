@@ -11,19 +11,19 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@Table(name = "cliente")
-@SequenceGenerator(name = "cliente_seq", sequenceName = "cliente_id_seq", allocationSize = 1)
+@Table(name = "customer")
+@SequenceGenerator(name = "customer_seq", sequenceName = "customer_id_seq", allocationSize = 1)
 public class CustomerEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cliente_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_seq")
     @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "cpf", nullable = false, length = 11)
     private String cpf;
 
-    @Column(name = "nome", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
     @Column(name = "email", nullable = false, length = 100)

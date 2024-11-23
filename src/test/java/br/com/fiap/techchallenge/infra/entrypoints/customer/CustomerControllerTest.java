@@ -3,7 +3,7 @@ package br.com.fiap.techchallenge.infra.entrypoints.customer;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import br.com.fiap.techchallenge.application.usecases.cliente.*;
+import br.com.fiap.techchallenge.application.usecases.costumers.*;
 import br.com.fiap.techchallenge.domain.ErrorsEnum;
 import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 import br.com.fiap.techchallenge.infra.entrypoints.rest.customer.CustomerController;

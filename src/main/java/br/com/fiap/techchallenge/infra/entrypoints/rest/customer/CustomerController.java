@@ -1,6 +1,6 @@
 package br.com.fiap.techchallenge.infra.entrypoints.rest.customer;
 
-import br.com.fiap.techchallenge.application.usecases.cliente.*;
+import br.com.fiap.techchallenge.application.usecases.costumers.*;
 import br.com.fiap.techchallenge.domain.ErrorResponse;
 import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 import br.com.fiap.techchallenge.infra.entrypoints.rest.customer.model.CustomerDTO;
@@ -46,10 +46,10 @@ public class CustomerController {
                     @Schema(implementation = ErrorResponse.class))})})
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*", maxAge = 3600)
-    public ResponseEntity<Void> registerCustomer(@RequestBody CustomerDTO clienteRequest) {
+    public ResponseEntity<Void> registerCustomer(@RequestBody CustomerDTO customerRequest) {
         log.info("Iniciando o cadastro de um cliente");
         try {
-            Customer customer = registerCustomerUseCase.saveCustomer(new Customer(clienteRequest.getCpf(), clienteRequest.getName(), clienteRequest.getEmail()));
+            Customer customer = registerCustomerUseCase.saveCustomer(new Customer(customerRequest.getCpf(), customerRequest.getName(), customerRequest.getEmail()));
             log.info("Cliente cadastrado com sucesso: {}", customer.getId());
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (CustomerAlreadyExistsException e) {
@@ -101,14 +101,10 @@ public class CustomerController {
     @CrossOrigin(origins = "*", maxAge = 3600)
     public ResponseEntity<CustomerDTO> updateCustomerData(@PathVariable("id") String id, @RequestBody JsonPatch patch) {
         log.info("Atualizando dados do cliente com ID: {}", id);
-        try {
-            Customer customer = updateParcialCustomerUseCase.updateCustomerData(id, patch);
-            log.info("Dados do cliente atualizados com sucesso: {}", customer.getId());
-            return ResponseEntity.ok(new CustomerDTO(customer.getId(), customer.getCpf(), customer.getName(), customer.getEmail()));
-        } catch (Exception e) {
-            log.error("Erro ao atualizar dados do cliente: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        Customer customer = updateParcialCustomerUseCase.updateCustomerData(id, patch);
+        log.info("Dados do cliente atualizados com sucesso: {}", customer.getId());
+        return ResponseEntity.ok(new CustomerDTO(customer.getId(), customer.getCpf(), customer.getName(), customer.getEmail()));
+
     }
 
     @Operation(summary = "Atualizar Customer", description = "Está operação consiste em atualizar o cliente cadastrado")
@@ -128,20 +124,16 @@ public class CustomerController {
     })
     @PutMapping(path = "/{id}", consumes = "application/json")
     @CrossOrigin(origins = "*", maxAge = 3600)
-    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable("id") String id, @RequestBody CustomerDTO clienteRequest) {
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable("id") String id, @RequestBody CustomerDTO customerRequest) {
         log.info("Atualizando cliente com ID: {}", id);
-        try {
-            Customer customer = updateCustomerUseCase.updateCustomers(id, new Customer(clienteRequest.getCpf(), clienteRequest.getName(), clienteRequest.getEmail()));
-            if (customer == null) {
-                log.info("Cliente não encontrado para o ID: {}", id);
-                return ResponseEntity.notFound().build();
-            }
-            log.info("Cliente atualizado com sucesso: {}", customer.getId());
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            log.error("Erro ao atualizar cliente: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
+        Customer customer = updateCustomerUseCase.updateCustomers(id, new Customer(customerRequest.getCpf(), customerRequest.getName(), customerRequest.getEmail()));
+        if (customer == null) {
+            log.info("Cliente não encontrado para o ID: {}", id);
+            return ResponseEntity.notFound().build();
         }
+        log.info("Cliente atualizado com sucesso: {}", customer.getId());
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Buscar Customer por CPF", description = "Esta operação consiste em buscar um cliente pelo CPF")

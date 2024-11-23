@@ -1,7 +1,7 @@
 package br.com.fiap.techchallenge.usecases.application.cliente;
 
 import br.com.fiap.techchallenge.application.gateways.ICustomerRepository;
-import br.com.fiap.techchallenge.application.usecases.cliente.UpdateParcialCustomerUseCase;
+import br.com.fiap.techchallenge.application.usecases.costumers.UpdateParcialCustomerUseCase;
 import br.com.fiap.techchallenge.domain.ErrorsEnum;
 import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 import br.com.fiap.techchallenge.infra.exception.CustomerException;

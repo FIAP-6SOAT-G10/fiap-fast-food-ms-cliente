@@ -4,8 +4,9 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import br.com.fiap.techchallenge.application.gateways.ICustomerRepository;
-import br.com.fiap.techchallenge.application.usecases.cliente.FindCustomerByCpfUseCase;
+import br.com.fiap.techchallenge.application.usecases.costumers.FindCustomerByCpfUseCase;
 import br.com.fiap.techchallenge.domain.entities.customer.Customer;
+import br.com.fiap.techchallenge.infra.exception.CustomerException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Optional;
@@ -34,24 +35,30 @@ class FindCustomerByCpfUseCaseTest {
 
     @Test
     void findByCpfReturnsEmptyWhenCpfDoesNotExist() {
-        when(customerRepository.findByCpf("12345678901")).thenReturn(Optional.empty());
+        when(customerRepository.findByCpf("12345678901")).thenThrow(new CustomerException("CPF informado não existe"));
 
-        Optional<Customer> result = findCustomerByIdUseCase.findByCpf("12345678901");
+        CustomerException exception = assertThrows(CustomerException.class, () -> {
+            findCustomerByIdUseCase.findByCpf("12345678901");
+        });
 
-        assertFalse(result.isPresent());
+        assertEquals("CPF informado não existe", exception.getMessage());
     }
 
     @Test
     void findByCpfReturnsEmptyWhenCpfIsNull() {
-        Optional<Customer> result = findCustomerByIdUseCase.findByCpf(null);
+        CustomerException exception = assertThrows(CustomerException.class, () -> {
+            findCustomerByIdUseCase.findByCpf(null);
+        });
 
-        assertFalse(result.isPresent());
+        assertEquals("CPF informado não existe", exception.getMessage());
     }
 
     @Test
     void findByCpfReturnsEmptyWhenCpfIsEmpty() {
-        Optional<Customer> result = findCustomerByIdUseCase.findByCpf("");
+        CustomerException exception = assertThrows(CustomerException.class, () -> {
+            findCustomerByIdUseCase.findByCpf("");
+        });
 
-        assertFalse(result.isPresent());
+        assertEquals("CPF informado não existe", exception.getMessage());
     }
 }

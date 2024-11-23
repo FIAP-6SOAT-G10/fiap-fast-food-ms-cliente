@@ -1,7 +1,7 @@
 package br.com.fiap.techchallenge.usecases.application.cliente;
 
 import br.com.fiap.techchallenge.application.gateways.ICustomerRepository;
-import br.com.fiap.techchallenge.application.usecases.cliente.ListCustomerUseCase;
+import br.com.fiap.techchallenge.application.usecases.costumers.ListCustomerUseCase;
 import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,17 +1,16 @@
-package br.com.fiap.techchallenge.application.usecases.cliente;
+package br.com.fiap.techchallenge.application.usecases.costumers;
 
 import br.com.fiap.techchallenge.application.gateways.ICustomerRepository;
 import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ListCustomerUseCase {
 
     private final ICustomerRepository customerRepository;
 
-    public ListCustomerUseCase(ICustomerRepository clienteRepository) {
-        this.customerRepository = clienteRepository;
+    public ListCustomerUseCase(ICustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
     }
 
     public List<Customer> listCustomers(String email, String cpf) {

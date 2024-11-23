@@ -101,19 +101,24 @@ public class CustomerRepository implements ICustomerRepository {
     public List<Customer> listCustomers(String email, String cpf) {
         log.info("Listando clientes com email: {} e CPF: {}", email, cpf);
         List<CustomerEntity> listaCustomerEntity = new ArrayList<>();
-        Predicate<CustomerEntity> predicate = cliente -> {
-            Boolean hasSameEmail = email == null || cliente.getEmail().equals(email);
-            Boolean hasSameCpf = cpf == null || cliente.getCpf().equals(cpf);
+        Predicate<CustomerEntity> predicate = customerEntity -> {
+            Boolean hasSameEmail = email == null || customerEntity.getEmail().equals(email);
+            Boolean hasSameCpf = cpf == null || customerEntity.getCpf().equals(cpf);
             return hasSameEmail && hasSameCpf;
         };
 
         if (email != null || cpf != null) {
             customerEntityRepository.findByEmailOrCpf(email, cpf).ifPresent(clienteList -> {
-                List<CustomerEntity> filteredClientesEntity = clienteList.stream().filter(predicate).toList();
-                listaCustomerEntity.addAll(filteredClientesEntity);
+                List<CustomerEntity> filteredCustomersEntity = clienteList.stream().filter(predicate).toList();
+                listaCustomerEntity.addAll(filteredCustomersEntity);
             });
         } else {
             listaCustomerEntity.addAll(customerEntityRepository.findAll());
+        }
+
+        if (listaCustomerEntity.isEmpty()) {
+            log.error("Nenhum cliente encontrado com email: {} e CPF: {}", email, cpf);
+            throw new CustomerException(ErrorsEnum.CLIENTE_NAO_ENCONTRADO);
         }
 
         log.info("Clientes encontrados: {}", listaCustomerEntity.size());
@@ -124,14 +129,6 @@ public class CustomerRepository implements ICustomerRepository {
     public Optional<Customer> findByCpf(String cpf) {
         Optional<Customer> customer = customerEntityRepository.findByCpf(cpf)
                 .map(customerMapper::fromEntityToDomain);
-        if (customer.isPresent()) {
-            log.info("Cliente encontrado: {}", customer.get().getId());
-        } else {
-            log.info("Cliente não encontrado para o CPF: {}", cpf);
-        }
-        if (customer.isEmpty()) {
-            throw new CustomerException(ErrorsEnum.CLIENTE_CPF_NAO_EXISTENTE);
-        }
         return customer;
     }
 
