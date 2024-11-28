@@ -26,6 +26,11 @@
 		<junit.version>5.9.3</junit.version>
 		<rest-assured.version>5.5.0</rest-assured.version>
 		<skipTests>false</skipTests>
+		<sonar.host.url>http://localhost:9000</sonar.host.url>
+		<sonar.login>sqp_ff082e3eb746238c527b6e4e211d86b8228b73b1</sonar.login>
+		<sonar.projectKey>seu_projeto</sonar.projectKey>
+		<sonar.projectName>customer-ms</sonar.projectName>
+		<sonar.projectVersion>1.0</sonar.projectVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -254,8 +259,22 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
+						<configuration>
+							<excludes>
+								<exclude>**/CustomerConfig.*</exclude>
+								<exclude>**/CustomerController.*</exclude>
+								<exclude>**/CustomerConfig.java</exclude>
+								<exclude>**/CustomerMicroserviceApplication.java</exclude>
+								<exclude>**/PosTechFastFoodApplicationTests.java</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.9.1.2184</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -281,8 +300,13 @@
 						<configuration>
 							<includes combine.self="override">
 								<include>**/*Test.java</include>
+								<include>**/*Controller*.java</include>
+								<include>**/*Gateway*.java</include>
+								<include>**/*UseCase*.java</include>
 							</includes>
 							<excludes combine.self="override">
+								<exclude>**/*</exclude>
+								<exclude>**/CustomerController.*</exclude>
 								<exclude>**/*IT.java</exclude>
 								<exclude>**/*BDD.java</exclude>
 							</excludes>
@@ -301,10 +325,15 @@
 						<version>${maven-surefire-plugin.version}</version>
 						<configuration>
 							<includes combine.self="override">
-								<include>**/*IT.java</include>
+								<include>**/*Test.java</include>
+								<include>**/*Controller*.java</include>
+								<include>**/*Gateway*.java</include>
+								<include>**/*UseCase*.java</include>
 							</includes>
 							<excludes combine.self="override">
-								<exclude>**/*Test.java</exclude>
+								<exclude>**/*</exclude>
+								<exclude>**/CustomerController.*</exclude>
+								<exclude>**/*IT.java</exclude>
 								<exclude>**/*BDD.java</exclude>
 							</excludes>
 						</configuration>
