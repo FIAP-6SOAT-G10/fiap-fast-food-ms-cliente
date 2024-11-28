@@ -9,5 +9,4 @@ class CustomerMicroserviceApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
