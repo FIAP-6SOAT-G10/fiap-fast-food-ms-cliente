@@ -265,7 +265,7 @@
 								<exclude>**/CustomerController.*</exclude>
 								<exclude>**/CustomerConfig.java</exclude>
 								<exclude>**/CustomerMicroserviceApplication.java</exclude>
-								<exclude>**/PosTechFastFoodApplicationTests.java</exclude>
+								<exclude>**/CustomerMicroserviceApplicationTests.java</exclude>
 							</excludes>
 						</configuration>
 					</execution>

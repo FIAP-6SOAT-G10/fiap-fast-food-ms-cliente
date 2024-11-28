@@ -9,7 +9,7 @@ import org.springframework.test.context.TestPropertySource;
     "logging.level.org.springframework=DEBUG",
     "logging.level.br.com.fiap.techchallenge=DEBUG"
 })
-class PosTechFastFoodApplicationTests {
+class CustomerMicroserviceApplicationTests {
 
     @Test
     void contextLoads() {
