@@ -2,12 +2,14 @@ FROM openjdk:17-slim
 
 MAINTAINER Grupo 10
 
-ENV AWS_ACCESS_KEY_ID=${awsAccessKeyId}
-ENV AWS_SECRET_ACCESS_KEY=${awsSecretAccessKey}
-ENV AWS_SESSION_TOKEN=${awsSessionToken}
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 
-COPY ./target/fiap-fast-food-ms-cliente-1.0.jar /usr/bin
+COPY ./target/customers-1.0.jar /usr/bin
 
 WORKDIR /usr/bin
-ENTRYPOINT java -jar fiap-fast-food-ms-cliente-1.0.jar
+RUN chown -R appuser:appgroup /usr/bin
+
+USER appuser
+
+ENTRYPOINT ["java", "-jar", "customers-1.0.jar"]
 EXPOSE 8080

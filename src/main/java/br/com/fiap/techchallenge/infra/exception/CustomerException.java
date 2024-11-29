@@ -16,6 +16,7 @@ public class CustomerException extends BaseException {
         super(erro, violations);
     }
 
+    @Override
     public String getErrorCode() {
         return super.getErrorCode();
     }

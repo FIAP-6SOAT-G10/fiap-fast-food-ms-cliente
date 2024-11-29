@@ -6,18 +6,18 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public abstract class BaseException extends RuntimeException {
-    private String message;
-    private ErrorsEnum error;
-    private HttpStatus httpStatusCode;
+    private final String message;
+    private final ErrorsEnum error;
+    private final HttpStatus httpStatusCode;
 
-    public BaseException(ErrorsEnum erro, String... violations) {
+    protected BaseException(ErrorsEnum erro, String... violations) {
         super(String.format(erro.getMessage(), (Object) violations));
         this.error = erro;
         this.message = erro.getMessage();
         this.httpStatusCode = erro.getHttpStatusCode();
     }
 
-    public BaseException(String erro, String[] violations) {
+    protected BaseException(String erro, String[] violations) {
         super(String.format(erro, (Object) violations));
         this.error = ErrorsEnum.ERRO_PARAMETROS;
         this.message = erro;

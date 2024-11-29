@@ -8,7 +8,7 @@
 		<relativePath/>
 	</parent>
 	<groupId>br.com.fiap</groupId>
-	<artifactId>fiap-fast-food-ms-cliente</artifactId>
+	<artifactId>customers</artifactId>
 	<version>1.0</version>
 	<name>Client Microservice</name>
 	<description>Microsserviço de clientes de um sistema de autoatendimento de fast food, composto por uma série de dispositivos e interfaces que permitem aos customers selecionar e fazer pedidos sem precisar interagir com um atendente.</description>
@@ -261,10 +261,16 @@
 								<exclude>**/CustomerConfig.java</exclude>
 								<exclude>**/CustomerMicroserviceApplication.java</exclude>
 								<exclude>**/CustomerMicroserviceApplicationTests.java</exclude>
+								<exclude>**/CustomerMicroserviceApplicationIT.java</exclude>
 							</excludes>
 						</configuration>
 					</execution>
 				</executions>
+				<configuration>
+					<excludes>
+						<exclude>**/ICustomerRepository$MockitoMock$*</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -299,6 +305,14 @@
 								<exclude>**/CustomerController.*</exclude>
 								<exclude>**/*IT.java</exclude>
 								<exclude>**/*BDD.java</exclude>
+								<exclude>**/application/gateways/**</exclude>
+								<exclude>**/domain/**</exclude>
+								<exclude>**/exceptions/**</exclude>
+								<exclude>**/infra/config/**</exclude>
+								<exclude>**/infra/dataproviders/**</exclude>
+								<exclude>**/CustomerEntity.java</exclude>
+								<exclude>**/exception/**</exclude>
+								<exclude>**/mapper/**</exclude>
 							</excludes>
 						</configuration>
 					</plugin>
@@ -325,6 +339,14 @@
 								<exclude>**/CustomerController.*</exclude>
 								<exclude>**/*IT.java</exclude>
 								<exclude>**/*BDD.java</exclude>
+								<exclude>**/application/gateways/**</exclude>
+								<exclude>**/domain/**</exclude>
+								<exclude>**/exceptions/**</exclude>
+								<exclude>**/infra/config/**</exclude>
+								<exclude>**/infra/dataproviders/**</exclude>
+								<exclude>**/CustomerEntity.java</exclude>
+								<exclude>**/exception/**</exclude>
+								<exclude>**/mapper/**</exclude>
 							</excludes>
 						</configuration>
 					</plugin>

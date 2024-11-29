@@ -1,5 +1,6 @@
 package br.com.fiap.techchallenge.infra.entrypoints.customer;
 
+import br.com.fiap.techchallenge.CustomerMicroserviceApplication;
 import br.com.fiap.techchallenge.infra.entrypoints.rest.customer.model.CustomerDTO;
 import io.restassured.RestAssured;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -13,13 +14,13 @@ import org.springframework.test.context.ActiveProfiles;
 import static io.restassured.RestAssured.enableLoggingOfRequestAndResponseIfValidationFails;
 import static io.restassured.RestAssured.given;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = CustomerMicroserviceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("integration-test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CustomerControllerIT {
 
-    static final String cpf = RandomStringUtils.randomNumeric(10).toString();
+    static final String CPF = RandomStringUtils.randomNumeric(10).toString();
 
     @BeforeEach
     void setup() {
@@ -52,7 +53,7 @@ class CustomerControllerIT {
         @Order(2)
         void deveCadastrarCliente() {
 
-            CustomerDTO customerDTO = new CustomerDTO(null, cpf, "Joao Saladinha", "joao.saladinha@example.com");
+            CustomerDTO customerDTO = new CustomerDTO(null, CPF, "Joao Saladinha", "joao.saladinha@example.com");
 
             given()
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -67,7 +68,7 @@ class CustomerControllerIT {
 
         @Test
         void deveLancarExcecaoAoCadastrarClienteExistente() {
-            CustomerDTO customerDTO = new CustomerDTO(null, cpf, "Joao Saladinha", "joao.saladinha@example.com");
+            CustomerDTO customerDTO = new CustomerDTO(null, CPF, "Joao Saladinha", "joao.saladinha@example.com");
 
             given()
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -93,7 +94,7 @@ class CustomerControllerIT {
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .log().all()
                     .when()
-                    .get("/api/customers/cpf/{cpf}", cpf)
+                    .get("/api/customers/cpf/{cpf}", CPF)
                     .then()
                     .log().all()
                     .statusCode(HttpStatus.OK.value());

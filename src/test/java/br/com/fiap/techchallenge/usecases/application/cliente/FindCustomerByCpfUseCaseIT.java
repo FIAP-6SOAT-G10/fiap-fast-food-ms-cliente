@@ -1,7 +1,6 @@
 package br.com.fiap.techchallenge.usecases.application.cliente;
 
 import br.com.fiap.techchallenge.application.usecases.costumers.FindCustomerByCpfUseCase;
-import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 import br.com.fiap.techchallenge.infra.exception.CustomerException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -9,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 

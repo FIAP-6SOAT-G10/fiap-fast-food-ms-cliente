@@ -2,7 +2,6 @@ package br.com.fiap.techchallenge.usecases.application.cliente;
 
 import br.com.fiap.techchallenge.application.usecases.costumers.UpdateParcialCustomerUseCase;
 import br.com.fiap.techchallenge.domain.ErrorsEnum;
-import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 import br.com.fiap.techchallenge.infra.exception.CustomerException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

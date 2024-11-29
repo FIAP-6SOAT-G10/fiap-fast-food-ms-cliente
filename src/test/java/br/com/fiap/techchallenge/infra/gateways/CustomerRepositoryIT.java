@@ -42,7 +42,7 @@ class CustomerRepositoryIT {
     private CustomerRepository customerRepository;
 
     @Test
-    void deveLancarExcecaoQuandoIdForInvalido() throws JsonPatchException {
+    void deveLancarExcecaoQuandoIdForInvalido() {
         JsonPatch patch = mock(JsonPatch.class);
 
         CustomerException exception = assertThrows(CustomerException.class, () -> {

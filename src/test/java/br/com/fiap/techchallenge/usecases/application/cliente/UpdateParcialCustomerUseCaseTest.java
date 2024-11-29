@@ -7,7 +7,6 @@ import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 import br.com.fiap.techchallenge.infra.exception.CustomerException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ class UpdateParcialCustomerUseCaseTest {
     }
 
     @Test
-    void updateCustomerDataSuccessfully() throws JsonPatchException, JsonProcessingException {
+    void updateCustomerDataSuccessfully() throws JsonProcessingException {
         JsonPatch patch = objectMapper.readValue("[{\"op\":\"replace\",\"path\":\"/name\",\"value\":\"Joao Saladinha\"}]", JsonPatch.class);
         Customer customer = new Customer("42321973899", "Joao Saladinha", "Joao.Saladinha@example.com");
         when(customerRepository.updateCustomerData(1L, patch)).thenReturn(customer);
@@ -42,28 +41,28 @@ class UpdateParcialCustomerUseCaseTest {
     }
 
     @Test
-    void updateCustomerDataThrowsExceptionWhenIdIsInvalid() throws JsonPatchException, JsonProcessingException {
+    void updateCustomerDataThrowsExceptionWhenIdIsInvalid() throws JsonProcessingException {
         JsonPatch patch = objectMapper.readValue("[{\"op\":\"replace\",\"path\":\"/name\",\"value\":\"Joao Saladinha\"}]", JsonPatch.class);
 
         assertThrows(CustomerException.class, () -> updateParcialCustomerUseCase.updateCustomerData("invalid_id", patch), ErrorsEnum.CLIENTE_CODIGO_IDENTIFICADOR_INVALIDO.getMessage());
     }
 
     @Test
-    void updateCustomerDataThrowsExceptionWhenCpfIsInvalid() throws JsonPatchException, JsonProcessingException {
+    void updateCustomerDataThrowsExceptionWhenCpfIsInvalid() throws JsonProcessingException {
         JsonPatch patch = objectMapper.readValue("[{\"op\":\"replace\",\"path\":\"/cpf\",\"value\":\"\"}]", JsonPatch.class);
 
         assertThrows(CustomerException.class, () -> updateParcialCustomerUseCase.updateCustomerData("1", patch), ErrorsEnum.CLIENTE_CPF_INVALIDO.getMessage());
     }
 
     @Test
-    void updateCustomerDataThrowsExceptionWhenNameIsInvalid() throws JsonPatchException, JsonProcessingException {
+    void updateCustomerDataThrowsExceptionWhenNameIsInvalid() throws JsonProcessingException {
         JsonPatch patch = objectMapper.readValue("[{\"op\":\"replace\",\"path\":\"/nome\",\"value\":\"\"}]", JsonPatch.class);
 
         assertThrows(CustomerException.class, () -> updateParcialCustomerUseCase.updateCustomerData("1", patch), ErrorsEnum.CLIENTE_NOME_OBRIGATORIO.getMessage());
     }
 
     @Test
-    void updateCustomerDataThrowsExceptionWhenEmailIsInvalid() throws JsonPatchException, JsonProcessingException {
+    void updateCustomerDataThrowsExceptionWhenEmailIsInvalid() throws JsonProcessingException {
         JsonPatch patch = objectMapper.readValue("[{\"op\":\"replace\",\"path\":\"/email\",\"value\":\"\"}]", JsonPatch.class);
 
         assertThrows(CustomerException.class, () -> updateParcialCustomerUseCase.updateCustomerData("1", patch), ErrorsEnum.CLIENTE_EMAIL_OBRIGATORIO.getMessage());

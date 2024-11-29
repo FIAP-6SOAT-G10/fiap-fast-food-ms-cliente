@@ -1,4 +1,3 @@
-// src/test/java/br/com/fiap/techchallenge/infra/entrypoints/customer/CustomerControllerBDD.java
 package br.com.fiap.techchallenge.infra.entrypoints.customer;
 
 import io.cucumber.java.pt.Dado;

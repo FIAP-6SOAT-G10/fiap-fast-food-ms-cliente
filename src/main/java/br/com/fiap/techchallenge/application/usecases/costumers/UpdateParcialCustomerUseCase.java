@@ -14,6 +14,7 @@ public class UpdateParcialCustomerUseCase {
 
     private final ICustomerRepository clienteRepository;
 
+    String value = "value";
     public UpdateParcialCustomerUseCase(ICustomerRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
@@ -47,7 +48,7 @@ public class UpdateParcialCustomerUseCase {
 
     private void validateCpf(JsonNode path, JsonNode parent) {
         if (path.asText().equalsIgnoreCase("/cpf")) {
-            String cpfContent = parent.get("value").asText();
+            String cpfContent = parent.get(value).asText();
             if (cpfContent == null || cpfContent.isEmpty()) {
                 throw new CustomerException(ErrorsEnum.CLIENTE_CPF_INVALIDO);
             }
@@ -56,7 +57,7 @@ public class UpdateParcialCustomerUseCase {
 
     private void validateName(JsonNode path, JsonNode parent) {
         if (path.asText().equalsIgnoreCase("/nome")) {
-            String nomeContent = parent.get("value").asText();
+            String nomeContent = parent.get(value).asText();
             if (nomeContent == null || nomeContent.isEmpty()) {
                 throw new CustomerException(ErrorsEnum.CLIENTE_NOME_OBRIGATORIO);
             }
@@ -65,7 +66,7 @@ public class UpdateParcialCustomerUseCase {
 
     private void validateEmail(JsonNode path, JsonNode parent) {
         if (path.asText().equalsIgnoreCase("/email")) {
-            String emailContent = parent.get("value").asText();
+            String emailContent = parent.get(value).asText();
             if (emailContent == null || emailContent.isEmpty()) {
                 throw new CustomerException(ErrorsEnum.CLIENTE_EMAIL_OBRIGATORIO);
             }

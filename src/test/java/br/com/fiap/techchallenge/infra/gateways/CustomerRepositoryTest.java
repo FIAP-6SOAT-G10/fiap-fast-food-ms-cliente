@@ -44,7 +44,7 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    public void updateCustomerDataSuccessfully() throws Exception {
+    void updateCustomerDataSuccessfully() throws Exception {
         CustomerEntity customerEntity = new CustomerEntity();
         customerEntity.setName("Joao Saladinha");
 
@@ -81,13 +81,13 @@ class CustomerRepositoryTest {
 }
 
     @Test
-    public void updateCustomerDataThrowsExceptionWhenGenericExceptionOccurs() {
-        JsonPatch patch = mock(JsonPatch.class);
+    void updateCustomerDataThrowsExceptionWhenGenericExceptionOccurs() {
+        JsonPatch jsonPatch = mock(JsonPatch.class);
 
         when(customerEntityRepository.findById(1L)).thenThrow(new RuntimeException("Generic exception"));
 
         assertThrows(CustomerException.class, () -> {
-            customerRepository.updateCustomerData(1L, patch);
+            customerRepository.updateCustomerData(1L, jsonPatch);
         });
     }
 }

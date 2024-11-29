@@ -13,8 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,9 +125,8 @@ public class CustomerRepository implements ICustomerRepository {
 
     @Override
     public Optional<Customer> findByCpf(String cpf) {
-        Optional<Customer> customer = customerEntityRepository.findByCpf(cpf)
+        return customerEntityRepository.findByCpf(cpf)
                 .map(customerMapper::fromEntityToDomain);
-        return customer;
     }
 
     private void fillWithNewData(CustomerEntity antigoCustomerEntity, CustomerEntity novoCustomerEntity) {
