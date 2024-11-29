@@ -15,7 +15,6 @@ spring:
     show-sql: true
   flyway:
     schemas: customers
-    locations: classpath:db/migration
   devtools:
     add-properties: false
 
