@@ -1,13 +1,10 @@
 name: SonarCloud Analysis
 
 on:
-  push:
-    branches:
-      - tcf*
   workflow_run:
-    workflows:
-      - "Tests"
-
+    workflows: ["Tests"]
+    types:
+      - completed
 jobs:
   sonarcloud:
     name: SonarCloud
