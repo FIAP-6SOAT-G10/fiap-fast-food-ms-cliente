@@ -99,4 +99,4 @@ jobs:
         run: mvn spring-boot:run
 
       - name: Run system tests
-        run: make system-test
+        run: mvn test -P bdd-test
