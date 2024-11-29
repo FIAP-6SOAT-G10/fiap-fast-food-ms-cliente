@@ -94,7 +94,7 @@ jobs:
         run: mvn install -DskipTests -q
 
       - name: Start application
-        run: mvn spring-boot:run -Dspring-boot.run.profiles=bdd-test &
+        run: mvn spring-boot:run &
 
       - name: Run system tests
         run: mvn test -P bdd-test
