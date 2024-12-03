@@ -264,6 +264,9 @@
 								<exclude>**/CustomerMicroserviceApplicationTests.java</exclude>
 								<exclude>**/CustomerMicroserviceApplicationIT.java</exclude>
 							</excludes>
+							<formats>
+								<format>XML</format>
+							</formats>
 						</configuration>
 					</execution>
 				</executions>
