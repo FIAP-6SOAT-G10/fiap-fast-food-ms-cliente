@@ -1,6 +1,7 @@
 package br.com.fiap.techchallenge.infra.gateways;
 
 import br.com.fiap.techchallenge.domain.ErrorsEnum;
+import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 import br.com.fiap.techchallenge.infra.dataproviders.database.persistence.CustomerEntityRepository;
 import br.com.fiap.techchallenge.infra.dataproviders.database.persistence.entities.CustomerEntity;
 import br.com.fiap.techchallenge.infra.exception.CustomerException;
@@ -44,26 +45,13 @@ class CustomerRepositoryIT {
     @Test
     void deveLancarExcecaoQuandoIdForInvalido() {
         JsonPatch patch = mock(JsonPatch.class);
+        Customer customer1 = mock(Customer.class);
 
         CustomerException exception = assertThrows(CustomerException.class, () -> {
-            customerRepository.updateCustomerData(1L, patch);
+            customerRepository.updateCustomerData(1L, customer1);
         });
 
         assertEquals(ErrorsEnum.CLIENTE_FALHA_GENERICA.getMessage(), exception.getMessage());
-    }
-
-    @Test
-    void deveLancarExcecaoQuandoJsonPatchExceptionOcorrer() throws JsonPatchException {
-        CustomerEntity customerEntity = new CustomerEntity();
-        JsonPatch patch = mock(JsonPatch.class);
-        when(customerEntityRepository.findById(1L)).thenReturn(Optional.of(customerEntity));
-        when(patch.apply(any(JsonNode.class))).thenThrow(new JsonPatchException("Patch error"));
-
-        CustomerException exception = assertThrows(CustomerException.class, () -> {
-            customerRepository.updateCustomerData(1L, patch);
-        });
-
-        assertEquals(ErrorsEnum.CLIENTE_FALHA_DURANTE_ATUALIZACAO.getMessage(), exception.getMessage());
     }
 
     @Test
@@ -71,7 +59,7 @@ class CustomerRepositoryIT {
         when(customerEntityRepository.findById(1L)).thenReturn(Optional.empty());
 
         CustomerException exception = assertThrows(CustomerException.class, () -> {
-            customerRepository.updateCustomerData(1L, mock(JsonPatch.class));
+            customerRepository.updateCustomerData(1L, mock(Customer.class));
         });
 
         assertEquals(ErrorsEnum.CLIENTE_FALHA_GENERICA.getMessage(), exception.getMessage());
@@ -82,7 +70,7 @@ class CustomerRepositoryIT {
         when(customerEntityRepository.findById(1L)).thenThrow(new RuntimeException("Generic exception"));
 
         CustomerException exception = assertThrows(CustomerException.class, () -> {
-            customerRepository.updateCustomerData(1L, mock(JsonPatch.class));
+            customerRepository.updateCustomerData(1L, mock(Customer.class));
         });
 
         assertEquals(ErrorsEnum.CLIENTE_FALHA_GENERICA.getMessage(), exception.getMessage());

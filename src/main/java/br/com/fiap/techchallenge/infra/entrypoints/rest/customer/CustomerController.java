@@ -3,9 +3,14 @@ package br.com.fiap.techchallenge.infra.entrypoints.rest.customer;
 import br.com.fiap.techchallenge.application.usecases.costumers.*;
 import br.com.fiap.techchallenge.domain.ErrorResponse;
 import br.com.fiap.techchallenge.domain.entities.customer.Customer;
+import br.com.fiap.techchallenge.domain.utils.DomainUtils;
 import br.com.fiap.techchallenge.infra.entrypoints.rest.customer.model.CustomerDTO;
 import br.com.fiap.techchallenge.infra.exception.CustomerAlreadyExistsException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,6 +39,7 @@ public class CustomerController {
     private final FindCustomerByCpfUseCase findCustomerByIdUseCase;
     private final UpdateParcialCustomerUseCase updateParcialCustomerUseCase;
     private final UpdateCustomerUseCase updateCustomerUseCase;
+    private final ObjectMapper objectMapper;
 
     @Operation(summary = "Cadastrar Customer", description = "Esta operação consiste em criar um novo cliente")
     @ApiResponses(value = {
@@ -99,12 +105,18 @@ public class CustomerController {
     })
     @PatchMapping(path = "/{id}", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*", maxAge = 3600)
-    public ResponseEntity<CustomerDTO> updateCustomerData(@PathVariable("id") String id, @RequestBody JsonPatch patch) {
+    public ResponseEntity<CustomerDTO> updateCustomerData(@PathVariable("id") String id, @RequestBody JsonPatch patch) throws JsonProcessingException, JsonPatchException {
         log.info("Atualizando dados do cliente com ID: {}", id);
-        Customer customer = updateParcialCustomerUseCase.updateCustomerData(id, patch);
-        log.info("Dados do cliente atualizados com sucesso: {}", customer.getId());
-        return ResponseEntity.ok(new CustomerDTO(customer.getId(), customer.getCpf(), customer.getName(), customer.getEmail()));
-
+        Optional<Customer> customer = findCustomerByIdUseCase.findByID(Long.parseLong(id));
+        DomainUtils.validateData(id, patch);
+        if (customer.isPresent()) {
+            JsonNode patched = patch.apply(objectMapper.convertValue(customer.get(), JsonNode.class));
+            Customer updatedCustomerData = updateParcialCustomerUseCase.updateCustomerData(id, objectMapper.treeToValue(patched, Customer.class));
+            log.info("Dados do cliente atualizados com sucesso: {}", customer.get().getId());
+            return ResponseEntity.ok(new CustomerDTO(updatedCustomerData.getId(), updatedCustomerData.getCpf(), updatedCustomerData.getName(), updatedCustomerData.getEmail()));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(summary = "Atualizar Customer", description = "Está operação consiste em atualizar o cliente cadastrado")

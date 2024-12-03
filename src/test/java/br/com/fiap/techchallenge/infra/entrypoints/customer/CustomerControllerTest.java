@@ -9,6 +9,7 @@ import br.com.fiap.techchallenge.domain.entities.customer.Customer;
 import br.com.fiap.techchallenge.infra.entrypoints.rest.customer.CustomerController;
 import br.com.fiap.techchallenge.infra.entrypoints.rest.customer.model.CustomerDTO;
 import br.com.fiap.techchallenge.infra.exception.CustomerAlreadyExistsException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -22,19 +23,20 @@ class CustomerControllerTest {
 
     private RegisterCustomerUseCase registerCustomerUseCase;
     private ListCustomerUseCase listCustomerUseCase;
-    private FindCustomerByCpfUseCase findCustomerByIdUseCase;
+    private FindCustomerByCpfUseCase findCustomerByCpfUseCase;
     private UpdateParcialCustomerUseCase updateParcialCustomerUseCase;
     private UpdateCustomerUseCase updateCustomerUseCase;
     private CustomerController customerController;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
         registerCustomerUseCase = mock(RegisterCustomerUseCase.class);
         listCustomerUseCase = mock(ListCustomerUseCase.class);
-        findCustomerByIdUseCase = mock(FindCustomerByCpfUseCase.class);
+        findCustomerByCpfUseCase = mock(FindCustomerByCpfUseCase.class);
         updateParcialCustomerUseCase = mock(UpdateParcialCustomerUseCase.class);
         updateCustomerUseCase = mock(UpdateCustomerUseCase.class);
-        customerController = new CustomerController(registerCustomerUseCase, listCustomerUseCase, findCustomerByIdUseCase, updateParcialCustomerUseCase, updateCustomerUseCase);
+        customerController = new CustomerController(registerCustomerUseCase, listCustomerUseCase, findCustomerByCpfUseCase, updateParcialCustomerUseCase, updateCustomerUseCase, objectMapper);
     }
 
     @Test
@@ -81,7 +83,7 @@ class CustomerControllerTest {
     @Test
     void getCustomerByCpfReturnsCustomerDetails() {
         Customer customer = new Customer("12345678901", "Joao Saladinha", "joao.saladinha@example.com");
-        when(findCustomerByIdUseCase.findByCpf("12345678901")).thenReturn(Optional.of(customer));
+        when(findCustomerByCpfUseCase.findByCpf("12345678901")).thenReturn(Optional.of(customer));
 
         ResponseEntity<CustomerDTO> response = customerController.getCustomerByCpf("12345678901");
 
@@ -91,7 +93,7 @@ class CustomerControllerTest {
 
     @Test
     void getCustomerByCpfReturnsNotFoundWhenCustomerDoesNotExist() {
-        when(findCustomerByIdUseCase.findByCpf("12345678901")).thenReturn(Optional.empty());
+        when(findCustomerByCpfUseCase.findByCpf("12345678901")).thenReturn(Optional.empty());
 
         ResponseEntity<CustomerDTO> response = customerController.getCustomerByCpf("12345678901");
 

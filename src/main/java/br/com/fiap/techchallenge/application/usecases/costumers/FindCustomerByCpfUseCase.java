@@ -31,4 +31,17 @@ public class FindCustomerByCpfUseCase {
         }
       return customerOptional;
     }
+
+    public Optional<Customer> findByID(Long id) {
+      Optional<Customer> customerOptional =  customerRepository.findById(id);
+        if (customerOptional.isPresent()) {
+            log.info("Cliente encontrado: {}", customerOptional.get().getId());
+        } else {
+            log.info("Cliente não encontrado para o ID: {}", id);
+        }
+        if (customerOptional.isEmpty()) {
+            throw new CustomerException(ErrorsEnum.CLIENTE_NAO_ENCONTRADO);
+        }
+      return customerOptional;
+    }
 }

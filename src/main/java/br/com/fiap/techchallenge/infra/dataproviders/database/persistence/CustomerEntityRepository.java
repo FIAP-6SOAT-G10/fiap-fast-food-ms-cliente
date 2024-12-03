@@ -15,4 +15,5 @@ public interface CustomerEntityRepository extends JpaRepository<CustomerEntity, 
     Optional<CustomerEntity> findByCpf(String cpf);
 
     Optional<List<CustomerEntity>> findByEmailOrCpf(String email, String cpf);
+
 }

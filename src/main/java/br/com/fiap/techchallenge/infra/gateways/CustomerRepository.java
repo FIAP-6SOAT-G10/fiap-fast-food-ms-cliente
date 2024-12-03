@@ -10,8 +10,6 @@ import br.com.fiap.techchallenge.infra.exception.CustomerException;
 import br.com.fiap.techchallenge.infra.mapper.CustomerMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -24,46 +22,32 @@ public class CustomerRepository implements ICustomerRepository {
 
     private final CustomerEntityRepository customerEntityRepository;
     private final CustomerMapper customerMapper;
-    private final ObjectMapper objectMapper;
 
     public CustomerRepository(CustomerEntityRepository customerEntityRepository, CustomerMapper customerMapper, ObjectMapper objectMapper) {
         this.customerEntityRepository = customerEntityRepository;
         this.customerMapper = customerMapper;
-        this.objectMapper = objectMapper;
     }
 
     @Override
-    public Customer updateCustomerData(Long id, JsonPatch patch) {
-        log.info("Atualizando dados do cliente com ID: {}", id);
+    public Customer updateCustomerData(Long id, Customer customer) throws CustomerException {
         try {
-            Optional<CustomerEntity> optionalCustomerEntity = customerEntityRepository.findById(id);
-            if (!optionalCustomerEntity.isPresent()) {
-                log.error("Cliente não encontrado para o ID: {}", id);
-                throw new CustomerException(ErrorsEnum.CLIENTE_CPF_NAO_EXISTENTE);
+            Optional<CustomerEntity> customerEntityOptional = customerEntityRepository.findById(id);
+            if (customerEntityOptional.isEmpty()) {
+                throw new CustomerException(ErrorsEnum.CLIENTE_NAO_ENCONTRADO.getMessage());
             }
 
-            CustomerEntity customerEntity = optionalCustomerEntity.get();
-            JsonNode customerNode = objectMapper.convertValue(customerEntity, JsonNode.class);
-            JsonNode patched = patch.apply(customerNode);
+            CustomerEntity updatedCustomerEntity = customerEntityRepository.saveAndFlush(customerMapper.fromDomainToEntity(customer));
 
-            if (patched == null) {
-                log.error("Erro ao aplicar patch no cliente com ID: {}", id);
-                throw new CustomerException(ErrorsEnum.CLIENTE_FALHA_GENERICA, "Patched node is null");
+            if (updatedCustomerEntity.getId() == null) {
+                throw new CustomerException(ErrorsEnum.CLIENTE_FALHA_GENERICA.getMessage());
             }
-
-            CustomerEntity updatedCustomerEntity = objectMapper.treeToValue(patched, CustomerEntity.class);
-            updatedCustomerEntity = customerEntityRepository.saveAndFlush(updatedCustomerEntity);
-            log.info("Dados do cliente atualizados com sucesso: {}", updatedCustomerEntity.getId());
 
             return customerMapper.fromEntityToDomain(updatedCustomerEntity);
-        } catch (JsonPatchException e) {
-            log.error("Erro ao aplicar patch no cliente com ID: {}: {}", id, e.getMessage());
-            throw new CustomerException(ErrorsEnum.CLIENTE_FALHA_DURANTE_ATUALIZACAO, String.valueOf(e));
         } catch (Exception e) {
             log.error("Erro genérico ao atualizar cliente com ID: {}: {}", id, e.getMessage());
-            throw new CustomerException(ErrorsEnum.CLIENTE_FALHA_GENERICA, String.valueOf(e));
+            throw new CustomerException(ErrorsEnum.CLIENTE_FALHA_GENERICA.getMessage(), String.valueOf(e));
         }
-}
+    }
 
     @Override
     public Customer updateCustomer(Long id, Customer customer) {
@@ -128,6 +112,13 @@ public class CustomerRepository implements ICustomerRepository {
         return customerEntityRepository.findByCpf(cpf)
                 .map(customerMapper::fromEntityToDomain);
     }
+
+    @Override
+    public Optional<Customer> findById(Long id) {
+        return customerEntityRepository.findById(id)
+                .map(customerMapper::fromEntityToDomain);
+    }
+
 
     private void fillWithNewData(CustomerEntity antigoCustomerEntity, CustomerEntity novoCustomerEntity) {
         antigoCustomerEntity.setCpf(novoCustomerEntity.getCpf());
