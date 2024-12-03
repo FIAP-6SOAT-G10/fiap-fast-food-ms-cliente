@@ -251,11 +251,13 @@
 					</execution>
 					<execution>
 						<id>report</id>
-						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
 						<configuration>
+							<formats>
+								<format>XML</format>
+							</formats>
 							<excludes>
 								<exclude>**/CustomerConfig.*</exclude>
 								<exclude>**/CustomerController.*</exclude>
@@ -264,9 +266,6 @@
 								<exclude>**/CustomerMicroserviceApplicationTests.java</exclude>
 								<exclude>**/CustomerMicroserviceApplicationIT.java</exclude>
 							</excludes>
-							<formats>
-								<format>XML</format>
-							</formats>
 						</configuration>
 					</execution>
 				</executions>
