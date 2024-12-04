@@ -1,0 +1,119 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Cache Maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: Install dependencies
+      run: mvn install -DskipTests
+
+    - name: Run unit tests
+      run: mvn test -Punit-test
+
+    - name: Archive unit test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: unit-test-results
+        path: target/surefire-reports/
+
+    - name: SonarCloud Scan
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        mvn sonar:sonar -Dsonar.projectKey=FIAP-6SOAT-G10_fiap-fast-food-ms-cliente -Dsonar.organization=fiap-6soat-g10-1 -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Pcov
+
+    - name: Archive unit test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: unit-test-results
+        path: target/surefire-reports/
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Cache Maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: Install dependencies
+      run: mvn install -DskipTests
+
+    - name: Run integration tests
+      run: mvn verify -Pintegration-test
+
+
+  bdd-tests:
+    runs-on: ubuntu-latest
+    needs: integration-tests
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Verify Docker installation
+        run: docker --version
+
+      - name: Initialize Database
+        run: docker run -d -p 5432:5432 -e POSTGRES_USER=tech -e POSTGRES_PASSWORD=tech_passwd -e POSTGRES_DB=customers -d postgres
+
+      - name: Install dependencies
+        run: mvn install -DskipTests -q
+
+      - name: Start application
+        run: mvn spring-boot:run &
+
+      - name: Run system tests
+        run: mvn test -P bdd-test
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-

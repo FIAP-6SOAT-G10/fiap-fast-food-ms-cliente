@@ -2,18 +2,21 @@ spring:
   profiles:
     active: '@activeProfile@'
   application:
-    name: tech-challenge
+    name: customers
   datasource:
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/customers
+    username: ${DB_USERNAME:tech}
+    password: ${DB_PASSWORD:tech_passwd}
   jpa:
     properties:
       hibernate:
-        default_schema: tech-challenge
+        default_schema: customers
         enable_lazy_load_no_trans: true
-    show-sql: false
+    show-sql: true
   flyway:
-    schemas: tech-challenge
+    schemas: customers
+  devtools:
+    add-properties: false
 
 server:
   servlet:
@@ -24,8 +27,4 @@ springdoc:
   api-docs:
     path: /api-docs
   swagger-ui:
-  path: swagger-ui-custom.html
-
-mercadopago:
-  access_token: ${MP_ACCESS_TOKEN:TEST-2194493215547460-072323-e7020fc0d11389fdae3dc86c6b9a1e4f-115466963}
-  notification_url: ${MP_NOTIFICATION_URL:https://614f-2804-7f0-bec0-2fa7-4d18-dc53-6657-d0ff.ngrok-free.app/pedidos/mercadopago/notifications}
+    path: swagger-ui-custom.html

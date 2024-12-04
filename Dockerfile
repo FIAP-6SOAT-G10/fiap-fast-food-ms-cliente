@@ -1,6 +1,15 @@
 FROM openjdk:17-slim
+
 MAINTAINER Grupo 10
-COPY ./target/fiap-fast-food-1.0.jar /usr/bin
+
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
+
+COPY ./target/customers-1.0.jar /usr/bin
+
 WORKDIR /usr/bin
-ENTRYPOINT java -jar fiap-fast-food-1.0.jar
+RUN chown -R appuser:appgroup /usr/bin
+
+USER appuser
+
+ENTRYPOINT ["java", "-jar", "customers-1.0.jar"]
 EXPOSE 8080
