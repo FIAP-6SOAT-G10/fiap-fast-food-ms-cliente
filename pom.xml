@@ -307,23 +307,10 @@
 						<configuration>
 							<includes combine.self="override">
 								<include>**/*Test.java</include>
-								<include>**/*Controller*.java</include>
-								<include>**/*Gateway*.java</include>
-								<include>**/*UseCase*.java</include>
 							</includes>
 							<excludes combine.self="override">
-								<exclude>**/*</exclude>
-								<exclude>**/CustomerController.*</exclude>
 								<exclude>**/*IT.java</exclude>
 								<exclude>**/*BDD.java</exclude>
-								<exclude>**/application/gateways/**</exclude>
-								<exclude>**/domain/**</exclude>
-								<exclude>**/exceptions/**</exclude>
-								<exclude>**/infra/config/**</exclude>
-								<exclude>**/infra/dataproviders/**</exclude>
-								<exclude>**/CustomerEntity.java</exclude>
-								<exclude>**/exception/**</exclude>
-								<exclude>**/mapper/**</exclude>
 							</excludes>
 						</configuration>
 					</plugin>
