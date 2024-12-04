@@ -257,9 +257,6 @@
 							<goal>report</goal>
 						</goals>
 						<configuration>
-							<formats>
-								<format>XML</format>
-							</formats>
 							<outputDirectory>${project.build.directory}/site/jacoco</outputDirectory>
 							<excludes>
 								<exclude>**/CustomerConfig.*</exclude>
@@ -412,13 +409,12 @@
 									<formats>
 										<format>XML</format>
 									</formats>
-									<excludes>
-										<exclude>**/CustomerConfig.*</exclude>
-										<exclude>**/CustomerController.*</exclude>
-										<exclude>**/CustomerConfig.java</exclude>
-										<exclude>**/CustomerMicroserviceApplication.java</exclude>
-										<exclude>**/CustomerMicroserviceApplicationTests.java</exclude>
-										<exclude>**/CustomerMicroserviceApplicationIT.java</exclude>
+									<includes combine.self="override">
+										<include>**/*Test.java</include>
+									</includes>
+									<excludes combine.self="override">
+										<exclude>**/*IT.java</exclude>
+										<exclude>**/*BDD.java</exclude>
 									</excludes>
 								</configuration>
 							</execution>
