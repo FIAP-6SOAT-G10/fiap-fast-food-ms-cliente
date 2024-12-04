@@ -1,10 +1,7 @@
 package br.com.fiap.techchallenge.infra.config;
 
 import br.com.fiap.techchallenge.application.gateways.ICustomerRepository;
-import br.com.fiap.techchallenge.application.usecases.costumers.UpdateParcialCustomerUseCase;
-import br.com.fiap.techchallenge.application.usecases.costumers.UpdateCustomerUseCase;
-import br.com.fiap.techchallenge.application.usecases.costumers.RegisterCustomerUseCase;
-import br.com.fiap.techchallenge.application.usecases.costumers.ListCustomerUseCase;
+import br.com.fiap.techchallenge.application.usecases.costumers.*;
 import br.com.fiap.techchallenge.infra.gateways.CustomerRepository;
 import br.com.fiap.techchallenge.infra.mapper.CustomerMapper;
 import br.com.fiap.techchallenge.infra.dataproviders.database.persistence.CustomerEntityRepository;
@@ -38,6 +35,11 @@ public class CustomerConfig {
     @Bean
     public ICustomerRepository customerRepository(CustomerEntityRepository customerEntityRepository, CustomerMapper customerMapper, ObjectMapper objectMapper) {
         return new CustomerRepository(customerEntityRepository, customerMapper, objectMapper);
+    }
+
+    @Bean
+    public FindCustomerByCpfUseCase findCustomerByCpfUseCase(ICustomerRepository customerRepository) {
+        return new FindCustomerByCpfUseCase(customerRepository);
     }
 
     @Bean

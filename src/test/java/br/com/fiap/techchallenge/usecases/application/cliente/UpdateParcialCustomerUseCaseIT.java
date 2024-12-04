@@ -32,7 +32,7 @@ class UpdateParcialCustomerUseCaseIT {
     @Test
     void deveLancarExcecaoQuandoOcorrerExcecaoGenerica() {
         Customer customer = new Customer("42321973899", "Joao Saladinha", "Joao.Saladinha@example.com");
-        CustomerException exception = assertThrows(CustomerException.class, () -> updateParcialCustomerUseCase.updateCustomerData("1", customer));
+        CustomerException exception = assertThrows(CustomerException.class, () -> updateParcialCustomerUseCase.updateCustomerData("121212", customer));
         assertEquals(ErrorsEnum.CLIENTE_FALHA_GENERICA.getMessage(), exception.getMessage());
     }
 }
