@@ -1,0 +1,7 @@
+name: Pull Request
+
+on:
+  push:
+    branches: [tcf*]
+  pull_request:
+    branches: [ main ]
