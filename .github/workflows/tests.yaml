@@ -143,7 +143,7 @@ jobs:
         run: mvn install -DskipTests
 
       - name: Run unit tests
-        run: mvn test -Pcov
+        run: mvn test -P sonar-coverage
 
       - name: Archive unit test results
         if: always()
@@ -163,4 +163,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn sonar:sonar -Dsonar.projectKey=FIAP-6SOAT-G10_fiap-fast-food-ms-cliente -Dsonar.organization=fiap-6soat-g10-1 -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/coverage-results.xml -Pcov
+          mvn sonar:sonar -Dsonar.projectKey=FIAP-6SOAT-G10_fiap-fast-food-ms-cliente -Dsonar.organization=fiap-6soat-g10-1 -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/coverage-results.xml -P sonar-coverage
