@@ -251,6 +251,7 @@
 					</execution>
 					<execution>
 						<id>report</id>
+						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
@@ -258,6 +259,7 @@
 							<formats>
 								<format>XML</format>
 							</formats>
+							<outputDirectory>${project.build.directory}/site/jacoco</outputDirectory>
 							<excludes>
 								<exclude>**/CustomerConfig.*</exclude>
 								<exclude>**/CustomerController.*</exclude>
@@ -274,6 +276,11 @@
 						<exclude>**/ICustomerRepository$MockitoMock$*</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.9.1.2184</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -376,11 +383,6 @@
 								</configurationParameters>
 							</properties>
 						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.sonarsource.scanner.maven</groupId>
-						<artifactId>sonar-maven-plugin</artifactId>
-						<version>3.9.1.2184</version>
 					</plugin>
 				</plugins>
 			</build>
