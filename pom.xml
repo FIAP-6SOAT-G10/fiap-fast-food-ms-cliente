@@ -28,7 +28,7 @@
 		<maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
 		<jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
 		<skipTests>false</skipTests>
-		<sonar.coverage.exclusions>**/infra/config/*,**/entrypoints/rest/customer/*,**/CustomerMicroserviceApplication.java,**/mapper/*,**/domain/exceptions/*,**/CustomerMapper.java,**/CustomerMicroserviceApplication.java,**/ErrorResponse.java,**/ErrorMessage.java,**/ErrorsEnum.java,**/domain/entities/customer/Customer.java</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/infra/config/*,**/entrypoints/rest/customer/*,**/CustomerMicroserviceApplication.java,**/mapper/*,**/domain/exceptions/*,**/CustomerMapper.java,**/CustomerMicroserviceApplication.java,**/ErrorResponse.java,**/ErrorMessage.java,**/ErrorsEnum.java,**/domain/entities/customer/Customer.java,**/src/main/java/br/com/fiap/techchallenge/infra/exception/*</sonar.coverage.exclusions>
 	</properties>
 
 	<dependencyManagement>
