@@ -386,7 +386,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>cov</id>
+			<id>sonar-coverage</id>
 			<build>
 				<plugins>
 					<plugin>
