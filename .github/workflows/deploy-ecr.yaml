@@ -63,7 +63,7 @@ jobs:
         run: docker push ${{ steps.aws_account.outputs.account_id }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/customers:1.0
 
       - name: Update kubeconfig for EKS
-        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name customers
+        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name fiap_fast_food_eks
 
   deploy:
     runs-on: ubuntu-latest
