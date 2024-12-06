@@ -39,7 +39,7 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
 
       - name: Build with Maven
-        run: mvn clean install -DskipTests -q
+        run: mvn clean install -DskipTests -Pprod -q
 
       - name: Build Docker Image
         run: docker-compose build customers

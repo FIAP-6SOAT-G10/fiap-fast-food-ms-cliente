@@ -288,6 +288,15 @@
 		<profile>
 			<id>local</id>
 			<properties>
+				<activeProfile>prod</activeProfile>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>local</id>
+			<properties>
 				<activeProfile>local</activeProfile>
 			</properties>
 			<activation>
