@@ -286,6 +286,9 @@
 
 	<profiles>
 		<profile>
+			<id>prod</id>
+		</profile>
+		<profile>
 			<id>local</id>
 			<properties>
 				<activeProfile>local</activeProfile>
