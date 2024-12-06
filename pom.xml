@@ -286,13 +286,7 @@
 
 	<profiles>
 		<profile>
-			<id>local</id>
-			<properties>
-				<activeProfile>prod</activeProfile>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
+			<id>prod</id>
 		</profile>
 		<profile>
 			<id>local</id>
