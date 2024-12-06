@@ -4,7 +4,7 @@ spring:
   application:
     name: customers
   datasource:
-    url: jdbc:postgresql://localhost:5432/customers
+    url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}
     username: ${DB_USERNAME:tech}
     password: ${DB_PASSWORD:tech_passwd}
   jpa:
