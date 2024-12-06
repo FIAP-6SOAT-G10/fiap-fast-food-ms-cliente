@@ -57,13 +57,13 @@ jobs:
           aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.aws_account.outputs.account_id }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
 
       - name: Tag Docker Image
-        run: docker tag ${{ steps.image_id.outputs.image_id }} ${{ steps.aws_account.outputs.account_id }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/customers_app:1.0
+        run: docker tag ${{ steps.image_id.outputs.image_id }} ${{ steps.aws_account.outputs.account_id }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/customers:1.0
 
       - name: Push Docker Image to ECR
-        run: docker push ${{ steps.aws_account.outputs.account_id }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/customers_app:1.0
+        run: docker push ${{ steps.aws_account.outputs.account_id }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/customers:1.0
 
       - name: Update kubeconfig for EKS
-        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name customers_eks
+        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name customers
 
   deploy:
     runs-on: ubuntu-latest
@@ -74,5 +74,5 @@ jobs:
         uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.TARGET_REPO_PAT }}
-          repository: FIAP-6SOAT-G10/fiap-fast-food-ms-pagamento-k8s
+          repository: FIAP-6SOAT-G10/fiap-fast-food-ms-cliente-k8s
           event-type: trigger-deploy
